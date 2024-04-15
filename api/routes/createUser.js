@@ -15,4 +15,13 @@ router.post("/", async (req, res) => {
   }
 });
 
+router.post("/:userId", async (req, res) => {
+  const isUserExist = await User.findById(req.params.userId);
+  if (isUserExist) {
+    res.status(200).json(isUserExist);
+  } else {
+    res.status(404).json("User not found");
+  }
+});
+
 module.exports = router;
