@@ -10,6 +10,14 @@ const authMiddleware = require("./middleware/auth");
 
 // auth middleware
 app.use(authMiddleware);
+// cors
+const cors = require("cors");
+app.use(
+  cors({
+    origin: "http://localhost:4200",
+    credentials: true,
+  })
+);
 
 dotenv.config();
 

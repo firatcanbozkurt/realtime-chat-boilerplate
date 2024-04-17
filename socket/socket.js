@@ -45,6 +45,7 @@ io.on("connection", (socket) => {
     const receiverSocket = connectedUsers.find(
       (user) => user.user === receiverUser
     );
+    console.log(receiverSocket);
     if (receiverSocket) {
       io.to(receiverSocket.id).emit("chat message", {
         name: connectedUsers.find((user) => user.id === socket.id).name,
