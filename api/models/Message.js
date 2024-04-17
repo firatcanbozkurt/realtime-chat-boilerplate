@@ -6,7 +6,7 @@
  */
 
 const mongoose = require("mongoose");
-
+//661e4285b0a79ae872ea0849
 const messageSchema = new mongoose.Schema({
   conversationId: {
     type: mongoose.Schema.Types.ObjectId,
@@ -14,7 +14,7 @@ const messageSchema = new mongoose.Schema({
     required: true,
   },
   sender: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: String,
     ref: "User",
     required: true,
   },

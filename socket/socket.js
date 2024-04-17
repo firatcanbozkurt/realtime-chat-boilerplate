@@ -13,7 +13,7 @@ app.use(express.json());
 const server = http.createServer(app);
 const io = socketIo(server, {
   cors: {
-    origin: "http://localhost:5173", // Client Side
+    origin: "http://localhost:4200", // Client Side
     methods: ["GET", "POST"],
     allowedHeaders: ["my-custom-header"],
     credentials: true,
@@ -27,11 +27,14 @@ let connectedUsers = [];
 
 // Socket.IO connection handling
 io.on("connection", (socket) => {
-  console.log(`User connected: ${socket.id}`);
-
   // Join app
   socket.on("join", (userData) => {
-    connectedUsers.push({ id: socket.id, user: userData.username });
+    connectedUsers.push({
+      id: socket.id,
+      user: userData.username,
+      name: userData.name,
+    });
+    console.log(connectedUsers);
     io.emit("userJoined", userData.username);
     io.emit("getAllUsers", connectedUsers);
   });
@@ -42,8 +45,10 @@ io.on("connection", (socket) => {
     const receiverSocket = connectedUsers.find(
       (user) => user.user === receiverUser
     );
+    console.log(receiverSocket);
     if (receiverSocket) {
       io.to(receiverSocket.id).emit("chat message", {
+        name: connectedUsers.find((user) => user.id === socket.id).name,
         sender: connectedUsers.find((user) => user.id === socket.id).user,
         message,
       });
