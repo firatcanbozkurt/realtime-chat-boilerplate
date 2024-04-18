@@ -55,6 +55,19 @@ io.on("connection", (socket) => {
     }
   });
 
+  socket.on("typing", (data) => {
+    console.log("SOMEONE IS TYPING");
+    const { receiverUser } = data;
+    const receiverSocket = connectedUsers.find(
+      (user) => user.user === receiverUser
+    );
+    if (receiverSocket) {
+      io.to(receiverSocket.id).emit("typing", {
+        userTyping: connectedUsers.find((user) => user.id === socket.id).user,
+      });
+    }
+  });
+
   // Handle user disconnection
   socket.on("disconnect", () => {
     const user = connectedUsers.find((user) => user.id === socket.id);
