@@ -33,6 +33,7 @@ app.use(express.json());
 app.use("/api/createUser", createUserRoute);
 app.use("/api/conversations", conversationRoute);
 app.use("/api/messages", messageRoute);
+app.use("/api/getUsers", require("./routes/searchUser"));
 
 app.listen(8800, () => {
   console.log("Backend server is running on port 8800!");
