@@ -47,8 +47,8 @@ router.get("/find/:firstUserId/:secondUserId", async (req, res) => {
 
 router.get("/getAllMessagesAndConversations/:userEmail", async (req, res) => {
   const user = req.params.userEmail;
-  //const user = "Firat@gmail.com";
   console.log(user);
+
   try {
     const conversations = await Conversation.find({
       members: { $in: [user] },
@@ -73,10 +73,12 @@ router.get("/getAllMessagesAndConversations/:userEmail", async (req, res) => {
           picture: `assets/img/avatars/${random}.jpg`,
           conversationId: conversation._id,
           members: conversation.members,
-          name: receiverUserName[0].name,
-          lastMessageTime: messages[messages.length - 1].timestamp,
-          lastMessage: messages[messages.length - 1].content,
-          messages: messages,
+          name: receiverUserName.length > 0 ? receiverUserName[0].name : "",
+          lastMessageTime:
+            messages.length > 0 ? messages[messages.length - 1].timestamp : "",
+          lastMessage:
+            messages.length > 0 ? messages[messages.length - 1].content : "",
+          messages: messages || [],
         };
 
         return conversationObject;
@@ -86,45 +88,6 @@ router.get("/getAllMessagesAndConversations/:userEmail", async (req, res) => {
     res.status(200).json(response);
   } catch (e) {
     console.log(e);
-    res.status(500).json(e);
-  }
-});
-
-router.get("/getAllMessages", async (req, res) => {
-  const user = "Firat@gmail.com";
-  console.log(user);
-  try {
-    const conversations = await Conversation.find({
-      members: { $in: [user] },
-    });
-
-    const response = await Promise.all(
-      conversations.map(async (conversation) => {
-        const messages = await Message.find({
-          conversationId: conversation._id,
-        });
-        const random = Math.floor(Math.random() * 15) + 1;
-        receiverUser = conversation.members.filter(
-          (member) => member !== user
-        )[0];
-        receiverName = await User.findOne({ email: receiverUser });
-
-        const conversationObject = {
-          picture: `assets/img/avatars/${random}.jpg`,
-          conversationId: conversation._id,
-          members: conversation.members,
-          name: conversation.members.filter((member) => member !== user)[0],
-          lastMessageTime: messages[messages.length - 1].timestamp,
-          lastMessage: messages[messages.length - 1].content,
-          messages: messages,
-        };
-
-        return conversationObject;
-      })
-    );
-
-    res.status(200).json(response);
-  } catch (e) {
     res.status(500).json(e);
   }
 });
