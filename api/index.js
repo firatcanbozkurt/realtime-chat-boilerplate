@@ -5,11 +5,15 @@ const dotenv = require("dotenv");
 const conversationRoute = require("./routes/conversation");
 const messageRoute = require("./routes/message");
 const createUserRoute = require("./routes/createUser");
-//const userRoute = require("./routes/users");
 const authMiddleware = require("./middleware/auth");
+
 
 // auth middleware
 app.use(authMiddleware);
+
+//middleware
+app.use(express.json());
+
 // cors
 const cors = require("cors");
 app.use(
@@ -25,8 +29,7 @@ mongoose.connect(process.env.MONGO_URI).then(() => {
   console.log("connected to db");
 });
 
-//middleware
-app.use(express.json());
+
 
 //app.use("/api/users", userRoute);
 
